@@ -120,11 +120,16 @@ func (st *Store) Get(r *http.Request, name string) (*sessions.Session, error) {
 	return sessions.GetRegistry(r).Get(st, name)
 }
 
-func (st *Store)Delete(r *http.Request, name string)(err error)  {
+func (st *Store)Delete(r *http.Request, w http.ResponseWriter,session sessions.Session)(err error)  {
 
-	if s,err := st.Get(r,name); err == nil {
-		_,err = st.e.Where("id = ?",s.ID).Delete(&xormSession{tableName: st.opts.TableName})
+	st.SessionOpts.MaxAge = -1
+
+	http.SetCookie(w, sessions.NewCookie(session.Name(), "", st.SessionOpts))
+	for k := range session.Values {
+		delete(session.Values, k)
 	}
+	_,err = st.e.Where("id = ?",session.ID).Delete(&xormSession{tableName: st.opts.TableName})
+
 	return
 }
 
