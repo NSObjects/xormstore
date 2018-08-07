@@ -120,7 +120,7 @@ func (st *Store) Get(r *http.Request, name string) (*sessions.Session, error) {
 	return sessions.GetRegistry(r).Get(st, name)
 }
 
-func (st *Store)Delete(r *http.Request, w http.ResponseWriter,session sessions.Session)(err error)  {
+func (st *Store)Delete(r *http.Request, w http.ResponseWriter,session *sessions.Session)(err error)  {
 
 	st.SessionOpts.MaxAge = -1
 
