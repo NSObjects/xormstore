@@ -120,6 +120,14 @@ func (st *Store) Get(r *http.Request, name string) (*sessions.Session, error) {
 	return sessions.GetRegistry(r).Get(st, name)
 }
 
+func (st *Store)Delete(r *http.Request, name string)(err error)  {
+
+	if s,err := st.Get(r,name); err == nil {
+		_,err = st.e.Where("id = ?",s.ID).Delete(&xormSession{tableName: st.opts.TableName})
+	}
+	return
+}
+
 // New creates a session with name without adding it to the registry.
 func (st *Store) New(r *http.Request, name string) (*sessions.Session, error) {
 	session := sessions.NewSession(st, name)
