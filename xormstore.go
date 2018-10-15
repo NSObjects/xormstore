@@ -122,7 +122,7 @@ func (st *Store) Get(r *http.Request, name string) (*sessions.Session, error) {
 
 func (st *Store)Delete(r *http.Request, w http.ResponseWriter,session *sessions.Session)(err error)  {
 
-	st.SessionOpts.MaxAge = -1
+	st.SessionOpts.MaxAge = 0
 
 	http.SetCookie(w, sessions.NewCookie(session.Name(), "", st.SessionOpts))
 	for k := range session.Values {
